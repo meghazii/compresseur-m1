@@ -5,7 +5,7 @@ CFLAGS=-I$(IDIR) -Wall -Wextra -Werror -ansi -std=c11 -pedantic -g
 
 LIBS=-lm
 
-SRCS = ./src/converter.c
+SRCS = ./src/converter.c ./src/fileReader.c ./src/algoCompress.c
 
 OBJS = $(SRCS:.c=.o)
 

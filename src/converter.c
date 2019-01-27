@@ -1,4 +1,4 @@
-#include "converter.h"
+#include "../include/converter.h"
 
 int
 bitset_to_int (bitset* bt)
@@ -53,6 +53,7 @@ bitset_to_bytes (bitset* bt)
   return buf;
 }
 
+/*
 int
 main ()
 {
@@ -71,3 +72,4 @@ main ()
   exit (EXIT_SUCCESS);
 }
 
+*/
