@@ -23,7 +23,7 @@ $(MAIN):	$(OBJS)
 	$(CC) $(CFLAGS) $(IDIR) -c $<  -o $@
 
 clean:
-	$(RM) *.o *~ $(MAIN)
+	$(RM) *.o *~ */*.o */*~ $(MAIN)
 
 depend:	$(SRCS)
 	makedepend $(IDIR) $^
