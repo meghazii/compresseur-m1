@@ -6,49 +6,46 @@
 
 #define MAX_TREE_HT 100 
 
-struct MinHeapNode* newNode(char data, unsigned freq);
+struct Noeud* creerNoeud(char c, unsigned freq);
 
-struct MinHeap* createMinHeap(unsigned capacity);
+struct Arbre* creerArbre(unsigned capacite);
 
-void swapMinHeapNode(struct MinHeapNode** a, struct MinHeapNode** b);
+void echangerNoeud(struct Noeud** a, struct Noeud** b);
 
-void minHeapify(struct MinHeap* minHeap, int idx);
+void minHeapify(struct Arbre* Arbre, int index);
 
-int isSizeOne (struct MinHeap* minHeap);
+int isSizeOne (struct Arbre* Arbre);
 
-struct MinHeapNode* extractMin (struct MinHeap* minHeap);
+struct Noeud* noeudMin (struct Arbre* Arbre);
 
-void insertMinHeap (struct MinHeap* minHeap, struct MinHeapNode* minHeapNode);
+void insererNoeud (struct Arbre* Arbre, struct Noeud* Noeud);
 
-void buildMinHeap (struct MinHeap* minHeap);
+void construireArbre (struct Arbre* Arbre);
 
-void printArr (int arr[], int n); 
+void afficherCode (int arr[], int n); 
 
-int isLeaf (struct MinHeapNode* root); 
+int estFeuille (struct Noeud* root); 
 
-struct MinHeapNode* buildHuffmanTree (char data[], int freq[], int size) ; 
+struct Noeud* creerArbreHuffman (char c[], int freq[], int size) ; 
 
-struct MinHeap* createAndBuildMinHeap (char data[], int freq[], int size); 
+struct Arbre* remplirArbre (char c[], int freq[], int size); 
 
-void printCodes(struct MinHeapNode* root, int arr[], int top); 
+void creerCodes(struct Noeud* a, int arr[], int top); 
 
-void HuffmanCodes (char data[], int freq[], int size); 
+void codageHuffman (char c[], int freq[], int size); 
 
-// A Huffman tree node 
-struct MinHeapNode { 
-  char data;  // One of the input character s
-  unsigned freq;  // Frequency of the character
-  struct MinHeapNode *left, *right; // Left and right child of this node
+// Noeud Arbre Huffman
+struct Noeud { 
+  char c;  // caractère
+  unsigned freq;  // fréquence
+  struct Noeud *left, *right; // fils gauche et fils droit 
+} Noeud; 
   
-} MinHeapNode; 
-  
-// A Min Heap:  Collection of 
-// min heap (or Hufmman tree) nodes 
-struct MinHeap { 
-  
-  unsigned size; // Current size of min heap 
-  unsigned capacity;  // capacity of min heap 
-  struct MinHeapNode** array;  // Attay of minheap node pointers 
+//Arbre de huffman
+struct Arbre { 
+  unsigned size; 
+  unsigned capacite; 
+  struct Noeud** array;  // tableau de pointeur de noeuds 
 }; 
 
 #endif

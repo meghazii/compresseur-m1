@@ -1,123 +1,125 @@
 #include "../include/algoCompress.h"
 
   
-// A utility function allocate a new 
-// min heap node with given character 
-// and frequency of the character 
-struct MinHeapNode*
-newNode(char data, unsigned freq) 
+/**
+* Associe à un caractère sa fréquence dans la structure Noeud 
+*/
+struct Noeud*
+creerNoeud(char c, unsigned freq) 
 { 
-  struct MinHeapNode* temp = (struct MinHeapNode*) malloc (sizeof(struct MinHeapNode)); 
+  struct Noeud* tmp = (struct Noeud*) malloc (sizeof(struct Noeud)); 
   
-  temp->left = temp->right = NULL; 
-  temp->data = data; 
-  temp->freq = freq; 
+  tmp->left = tmp->right = NULL; 
+  tmp->c = c; 
+  tmp->freq = freq; 
   
-  return temp; 
+  return tmp; 
 } 
   
-// A utility function to create 
-// a min heap of given capacity 
-struct MinHeap*
-createMinHeap(unsigned capacity)  
+/**
+* initialise un arbre d'une capacité donnée
+*/
+struct Arbre*
+creerArbre(unsigned capacite)  
 { 
-  struct MinHeap* minHeap = (struct MinHeap*)malloc(sizeof(struct MinHeap)); 
+  struct Arbre* Arbre = (struct Arbre*)malloc(sizeof(struct Arbre)); 
   
-  // current size is 0 
-  minHeap->size = 0; 
-  
-  minHeap->capacity = capacity; 
-  
-  minHeap->array = (struct MinHeapNode**)malloc(minHeap->capacity * sizeof(struct MinHeapNode*)); 
-  return minHeap; 
+  Arbre->size = 0; 
+  Arbre->capacite = capacite; 
+  Arbre->array = (struct Noeud**)malloc(Arbre-> capacite * sizeof(struct Noeud*)); 
+  return Arbre; 
 } 
   
-// A utility function to 
-// swap two min heap nodes 
+/**
+* Echange 2 noeuds (caractère, fréquence et fils gauche et droit)
+*/
 void
-swapMinHeapNode(struct MinHeapNode** a, struct MinHeapNode** b) 
+echangerNoeud(struct Noeud** a, struct Noeud** b) 
 { 
-  struct MinHeapNode* t = *a; 
+  struct Noeud* t = *a; 
   *a = *b; 
   *b = t; 
 } 
   
-// The standard minHeapify function. 
+//minHeapify standard
 void
-minHeapify(struct MinHeap* minHeap, int idx) 
+minHeapify(struct Arbre* Arbre, int index) 
 { 
-  int smallest = idx; 
-  int left = 2 * idx + 1; 
-  int right = 2 * idx + 2; 
+  int min = index; 
+  int left = 2 * index + 1; 
+  int right = 2 * index + 2; 
   
-  if (left < (int) minHeap->size && minHeap->array[left]-> 
-      freq < minHeap->array[smallest]->freq) 
-    smallest = left; 
+  if (left < (int) Arbre->size && Arbre->array[left]-> freq < Arbre->array[min]->freq) 
+    min = left; 
   
-  if (right < (int) minHeap->size && minHeap->array[right]->freq < minHeap->array[smallest]->freq) 
-    smallest = right; 
+  if (right < (int) Arbre->size && Arbre->array[right]->freq < Arbre->array[min]->freq) 
+    min = right; 
   
-  if (smallest != idx)
-    { 
-      swapMinHeapNode(&minHeap->array[smallest], &minHeap->array[idx]); 
-      minHeapify(minHeap, smallest); 
+  if (min != index){ 
+      echangerNoeud(&Arbre->array[min], &Arbre->array[index]); 
+      minHeapify(Arbre, min); 
     } 
 } 
   
-// A utility function to check 
-// if size of heap is 1 or not 
+/**
+* return true si l'arbre est de taille 1
+*/
 int
-isSizeOne (struct MinHeap* minHeap) 
+isSizeOne (struct Arbre* Arbre) 
 { 
-  return (minHeap->size == 1); 
+  return (Arbre->size == 1); 
 } 
   
-// A standard function to extract 
-// minimum value node from heap 
-struct MinHeapNode*
-extractMin (struct MinHeap* minHeap) 
+/**
+*  trouve et extrait le noeud de fréquence min
+*/
+struct Noeud*
+noeudMin (struct Arbre* Arbre) 
 { 
   
-  struct MinHeapNode* temp = minHeap->array[0]; 
-  minHeap->array[0] = minHeap->array[minHeap->size - 1]; 
+  struct Noeud* tmp = Arbre->array[0]; 
+  Arbre->array[0] = Arbre->array[Arbre->size - 1]; 
   
-  --minHeap->size; 
-  minHeapify(minHeap, 0); 
+  --Arbre->size; 
+  minHeapify(Arbre, 0); 
   
-  return temp; 
+  return tmp; 
 } 
   
-// A utility function to insert 
-// a new node to Min Heap 
+/**
+* Insère Noeud dans Arbre
+*/
 void
-insertMinHeap (struct MinHeap* minHeap, struct MinHeapNode* minHeapNode)   
+insererNoeud (struct Arbre* Arbre, struct Noeud* Noeud)   
 { 
-  ++minHeap->size; 
-  int i = minHeap->size - 1; 
+  ++Arbre->size; 
+  int i = Arbre->size - 1; 
   
-  while (i && minHeapNode->freq < minHeap->array[(i - 1) / 2]->freq)
+  while (i && Noeud->freq < Arbre->array[(i - 1) / 2]->freq)
     { 
-      minHeap->array[i] = minHeap->array[(i - 1) / 2]; 
+      Arbre->array[i] = Arbre->array[(i - 1) / 2]; 
       i = (i - 1) / 2; 
     } 
   
-  minHeap->array[i] = minHeapNode; 
+  Arbre->array[i] = Noeud; 
 } 
   
-// A standard funvtion to build min heap 
+/**
+* Création de l'arbre
+*/
 void
-buildMinHeap (struct MinHeap* minHeap) 
+construireArbre (struct Arbre* Arbre) 
 { 
-  int n = minHeap->size - 1; 
+  int n = Arbre->size - 1; 
   int i; 
   
   for (i = (n - 1) / 2; i >= 0; --i) 
-    minHeapify(minHeap, i); 
+    minHeapify(Arbre, i); 
 } 
   
-// A utility function to print an array of size n 
+
 void
-printArr (int arr[], int n) 
+afficherCode (int arr[], int n) 
 { 
   int i; 
   for (i = 0; i < n; ++i) 
@@ -126,126 +128,103 @@ printArr (int arr[], int n)
   printf("\n"); 
 } 
   
-// Utility function to check if this node is leaf 
+/**
+* return true si root est une feuille
+*/ 
 int
-isLeaf (struct MinHeapNode* root) 
+estFeuille (struct Noeud* root) 
 { 
   return ! (root->left) && ! (root->right); 
 } 
   
-// Creates a min heap of capacity 
-// equal to size and inserts all character of 
-// data[] in min heap. Initially size of 
-// min heap is equal to capacity 
-struct MinHeap*
-createAndBuildMinHeap (char data[], int freq[], int size) 
+/**
+* Creer un arbre de capacité égale à size et insère tous les caractère de c[]
+*/ 
+struct Arbre*
+remplirArbre (char c[], int freq[], int size) 
 { 
-  struct MinHeap* minHeap = createMinHeap(size); 
+  struct Arbre* a = creerArbre(size); 
   
   for (int i = 0; i < size; ++i) 
-    minHeap->array[i] = newNode(data[i], freq[i]); 
+    a->array[i] = creerNoeud(c[i], freq[i]); 
   
-  minHeap->size = size; 
-  buildMinHeap(minHeap); 
+  a->size = size; 
+  construireArbre(a); 
   
-  return minHeap; 
+  return a; 
 } 
   
-// The main function that builds Huffman tree 
-struct MinHeapNode*
-buildHuffmanTree (char data[], int freq[], int size) 
+/**
+* 
+*/
+struct Noeud*
+creerArbreHuffman (char c[], int freq[], int size) 
 { 
-  struct MinHeapNode *left, *right, *top; 
+  struct Noeud *left, *right, *n; 
+  struct Arbre* Arbre = remplirArbre(c, freq, size); 
   
-  // Step 1: Create a min heap of capacity 
-  // equal to size.  Initially, there are 
-  // modes equal to size. 
-  struct MinHeap* minHeap = createAndBuildMinHeap(data, freq, size); 
+  while (!isSizeOne(Arbre)) {  
+//on trouve les 2 Noeuds de fréquence min
+    left = noeudMin(Arbre); 
+    right = noeudMin(Arbre); 
   
-  // Iterate while size of heap doesn't become 1 
-  while (!isSizeOne(minHeap)) { 
+    // Création d'un nouveau noeud n étiquetté "$" de fréquence égale à la somme des fréquences des 2 noeuds min (qui deviennent les noeuds fils) 
+    n = creerNoeud('$', left->freq + right->freq); 
+    n->left = left; 
+    n->right = right; 
   
-    // Step 2: Extract the two minimum 
-    // freq items from min heap 
-    left = extractMin(minHeap); 
-    right = extractMin(minHeap); 
-  
-    // Step 3:  Create a new internal 
-    // node with frequency equal to the 
-    // sum of the two nodes frequencies. 
-    // Make the two extracted node as 
-    // left and right children of this new node. 
-    // Add this node to the min heap 
-    // '$' is a special value for internal nodes, not used 
-    top = newNode('$', left->freq + right->freq); 
-  
-    top->left = left; 
-    top->right = right; 
-  
-    insertMinHeap(minHeap, top); 
+    insererNoeud(Arbre, n); //on l'insère dans l'arbre 
   } 
   
-  // Step 4: The remaining node is the 
-  // root node and the tree is complete. 
-  return extractMin(minHeap); 
+  // On retourne le dernier noeud restant , qui est la racine de l'arbre complet
+  return noeudMin(Arbre); 
 } 
   
-// Prints huffman codes from the root of Huffman Tree. 
-// It uses arr[] to store codes 
+// Affichage des codes de huffman optenus et stockage dans arr[]
 void
-printCodes(struct MinHeapNode* root, int arr[], int top) 
+creerCodes(struct Noeud* a, int arr[], int top) 
 { 
-  // Assign 0 to left edge and recur 
-  if (root->left) { 
-  
+  // On assigne la valeur 0 aux branche gauches 
+  if (a->left) { 
     arr[top] = 0; 
-    printCodes(root->left, arr, top + 1); 
+    creerCodes(a->left, arr, top + 1); 
   } 
   
-  // Assign 1 to right edge and recur 
-  if (root->right) { 
-  
+  // et 1 aux branches droites
+  if (a->right) { 
     arr[top] = 1; 
-    printCodes(root->right, arr, top + 1); 
+    creerCodes(a->right, arr, top + 1); 
   } 
   
-  // If this is a leaf node, then 
-  // it contains one of the input 
-  // characters, print the character 
-  // and its code from arr[] 
-  if (isLeaf(root)) { 
-  
-    printf("%c: ", root->data); 
-    printArr(arr, top); 
+  // quand on est descendu jusqu'à une feuille on affiche le caractère, ainsi que le code de huffman correspondant
+  if (estFeuille(a)) { 
+    printf("%c: ", a->c); 
+    afficherCode(arr, top); 
   } 
 } 
   
-// The main function that builds a 
-// Huffman Tree and print codes by traversing 
-// the built Huffman Tree 
+
 void
-HuffmanCodes (char data[], int freq[], int size) 
+codageHuffman (char c[], int freq[], int size) 
 { 
-  // Construct Huffman Tree 
-  struct MinHeapNode* root = buildHuffmanTree(data, freq, size); 
+  // Construction arbre de huffman
+  struct Noeud* a = creerArbreHuffman(c, freq, size); 
   
-  // Print Huffman codes using 
-  // the Huffman tree built above 
+  // Affochages de codes obtenu grace à l'arbre
   int arr[MAX_TREE_HT], top = 0; 
-  
-  printCodes(root, arr, top); 
+  creerCodes(a, arr, top); 
 } 
   
-// Driver program to test above functions 
+
 int
 main() 
 { 
-  char arr[] = { 'a', 'b', 'c' }; 
+  char arr[] = { 'a', 'b', 'c'}; 
   int freq[] = { 5, 9, 12 }; 
   
   int size = sizeof(arr) / sizeof(arr[0]); 
   
-  HuffmanCodes(arr, freq, size); 
+  codageHuffman(arr, freq, size); 
   
   return 0; 
 } 
