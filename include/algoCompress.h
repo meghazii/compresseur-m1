@@ -6,7 +6,29 @@
 
 #define MAX_TREE_HT 100 
 
-struct Noeud* creerNoeud(char c, unsigned freq);
+
+typedef struct symbole {
+  char* sym;
+  size_t n;
+} symbole;
+
+
+// Noeud Arbre Huffman
+typedef struct Noeud { 
+  symbole c;  // caractère
+  unsigned freq;  // fréquence
+  struct Noeud *left, *right; // fils gauche et fils droit 
+} Noeud; 
+  
+//Arbre de huffman
+typedef struct Arbre { 
+  unsigned size; 
+  unsigned capacite; 
+  struct Noeud** array;  // tableau de pointeur de noeuds 
+} Arbre;
+
+
+struct Noeud* creerNoeud(symbole c, unsigned freq);
 
 struct Arbre* creerArbre(unsigned capacite);
 
@@ -26,26 +48,12 @@ void afficherCode (int arr[], int n);
 
 int estFeuille (struct Noeud* root); 
 
-struct Noeud* creerArbreHuffman (char c[], int freq[], int size) ; 
+struct Noeud* creerArbreHuffman (symbole c[], int freq[], int size) ; 
 
-struct Arbre* remplirArbre (char c[], int freq[], int size); 
+struct Arbre* remplirArbre (symbole c[], int freq[], int size); 
 
 void creerCodes(struct Noeud* a, int arr[], int top); 
 
-void codageHuffman (char c[], int freq[], int size); 
-
-// Noeud Arbre Huffman
-struct Noeud { 
-  char c;  // caractère
-  unsigned freq;  // fréquence
-  struct Noeud *left, *right; // fils gauche et fils droit 
-} Noeud; 
-  
-//Arbre de huffman
-struct Arbre { 
-  unsigned size; 
-  unsigned capacite; 
-  struct Noeud** array;  // tableau de pointeur de noeuds 
-}; 
+void codageHuffman (symbole c[], int freq[], int size); 
 
 #endif

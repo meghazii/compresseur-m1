@@ -2,12 +2,12 @@
 
   
 /**
-* Associe à un caractère sa fréquence dans la structure Noeud 
-*/
-struct Noeud*
-creerNoeud(char c, unsigned freq) 
+ * Associe à un caractère sa fréquence dans la structure Noeud 
+ */
+Noeud*
+creerNoeud (symbole c, unsigned freq) 
 { 
-  struct Noeud* tmp = (struct Noeud*) malloc (sizeof(struct Noeud)); 
+  Noeud* tmp = ( Noeud*) malloc (sizeof( Noeud)); 
   
   tmp->left = tmp->right = NULL; 
   tmp->c = c; 
@@ -17,33 +17,33 @@ creerNoeud(char c, unsigned freq)
 } 
   
 /**
-* initialise un arbre d'une capacité donnée
-*/
-struct Arbre*
+ * initialise un arbre d'une capacité donnée
+ */
+Arbre*
 creerArbre(unsigned capacite)  
 { 
-  struct Arbre* Arbre = (struct Arbre*)malloc(sizeof(struct Arbre)); 
+  Arbre* arbre = ( Arbre*)malloc(sizeof( Arbre)); 
   
-  Arbre->size = 0; 
-  Arbre->capacite = capacite; 
-  Arbre->array = (struct Noeud**)malloc(Arbre-> capacite * sizeof(struct Noeud*)); 
-  return Arbre; 
+  arbre->size = 0; 
+  arbre->capacite = capacite; 
+  arbre->array = ( Noeud**)malloc(arbre-> capacite * sizeof( Noeud*)); 
+  return arbre; 
 } 
   
 /**
-* Echange 2 noeuds (caractère, fréquence et fils gauche et droit)
-*/
+ * Echange 2 noeuds (caractère, fréquence et fils gauche et droit)
+ */
 void
-echangerNoeud(struct Noeud** a, struct Noeud** b) 
+echangerNoeud( Noeud** a,  Noeud** b) 
 { 
-  struct Noeud* t = *a; 
+  Noeud* t = *a; 
   *a = *b; 
   *b = t; 
 } 
   
 //minHeapify standard
 void
-minHeapify(struct Arbre* Arbre, int index) 
+minHeapify( Arbre* Arbre, int index) 
 { 
   int min = index; 
   int left = 2 * index + 1; 
@@ -56,28 +56,28 @@ minHeapify(struct Arbre* Arbre, int index)
     min = right; 
   
   if (min != index){ 
-      echangerNoeud(&Arbre->array[min], &Arbre->array[index]); 
-      minHeapify(Arbre, min); 
-    } 
+    echangerNoeud(&Arbre->array[min], &Arbre->array[index]); 
+    minHeapify(Arbre, min); 
+  } 
 } 
   
 /**
-* return true si l'arbre est de taille 1
-*/
+ * return true si l'arbre est de taille 1
+ */
 int
-isSizeOne (struct Arbre* Arbre) 
+isSizeOne ( Arbre* Arbre) 
 { 
   return (Arbre->size == 1); 
 } 
   
 /**
-*  trouve et extrait le noeud de fréquence min
-*/
-struct Noeud*
-noeudMin (struct Arbre* Arbre) 
+ *  trouve et extrait le noeud de fréquence min
+ */
+Noeud*
+noeudMin ( Arbre* Arbre) 
 { 
   
-  struct Noeud* tmp = Arbre->array[0]; 
+  Noeud* tmp = Arbre->array[0]; 
   Arbre->array[0] = Arbre->array[Arbre->size - 1]; 
   
   --Arbre->size; 
@@ -87,10 +87,10 @@ noeudMin (struct Arbre* Arbre)
 } 
   
 /**
-* Insère Noeud dans Arbre
-*/
+ * Insère Noeud dans Arbre
+ */
 void
-insererNoeud (struct Arbre* Arbre, struct Noeud* Noeud)   
+insererNoeud ( Arbre* Arbre,  Noeud* Noeud)   
 { 
   ++Arbre->size; 
   int i = Arbre->size - 1; 
@@ -105,10 +105,10 @@ insererNoeud (struct Arbre* Arbre, struct Noeud* Noeud)
 } 
   
 /**
-* Création de l'arbre
-*/
+ * Création de l'arbre
+ */
 void
-construireArbre (struct Arbre* Arbre) 
+construireArbre ( Arbre* Arbre) 
 { 
   int n = Arbre->size - 1; 
   int i; 
@@ -129,47 +129,48 @@ afficherCode (int arr[], int n)
 } 
   
 /**
-* return true si root est une feuille
-*/ 
+ * return true si root est une feuille
+ */ 
 int
-estFeuille (struct Noeud* root) 
+estFeuille ( Noeud* root) 
 { 
   return ! (root->left) && ! (root->right); 
 } 
   
 /**
-* Creer un arbre de capacité égale à size et insère tous les caractère de c[]
-*/ 
-struct Arbre*
-remplirArbre (char c[], int freq[], int size) 
+ * Creer un arbre de capacité égale à size et insère tous les caractère de c[]
+ */ 
+Arbre*
+remplirArbre (symbole c[], int freq[], int size) 
 { 
-  struct Arbre* a = creerArbre(size); 
+  Arbre* a = creerArbre(size); 
   
   for (int i = 0; i < size; ++i) 
     a->array[i] = creerNoeud(c[i], freq[i]); 
   
   a->size = size; 
   construireArbre(a); 
-  
+
   return a; 
 } 
-  
+
 /**
-* 
-*/
-struct Noeud*
-creerArbreHuffman (char c[], int freq[], int size) 
+ * 
+ */
+Noeud*
+creerArbreHuffman (symbole c[], int freq[], int size) 
 { 
-  struct Noeud *left, *right, *n; 
-  struct Arbre* Arbre = remplirArbre(c, freq, size); 
+  Noeud *left, *right, *n; 
+  Arbre* Arbre = remplirArbre(c, freq, size); 
+  symbole tmp; tmp.sym = (char*) malloc (sizeof(char)); tmp.n = 1;
   
   while (!isSizeOne(Arbre)) {  
-//on trouve les 2 Noeuds de fréquence min
+    //on trouve les 2 Noeuds de fréquence min
     left = noeudMin(Arbre); 
     right = noeudMin(Arbre); 
   
-    // Création d'un nouveau noeud n étiquetté "$" de fréquence égale à la somme des fréquences des 2 noeuds min (qui deviennent les noeuds fils) 
-    n = creerNoeud('$', left->freq + right->freq); 
+    // Création d'un nouveau noeud n étiquetté "$" de fréquence égale à la somme des fréquences des 2 noeuds min (qui deviennent les noeuds fils)
+    n = creerNoeud(tmp, left->freq + right->freq); 
     n->left = left; 
     n->right = right; 
   
@@ -182,7 +183,7 @@ creerArbreHuffman (char c[], int freq[], int size)
   
 // Affichage des codes de huffman optenus et stockage dans arr[]
 void
-creerCodes(struct Noeud* a, int arr[], int top) 
+creerCodes( Noeud* a, int arr[], int top) 
 { 
   // On assigne la valeur 0 aux branche gauches 
   if (a->left) { 
@@ -197,30 +198,44 @@ creerCodes(struct Noeud* a, int arr[], int top)
   } 
   
   // quand on est descendu jusqu'à une feuille on affiche le caractère, ainsi que le code de huffman correspondant
-  if (estFeuille(a)) { 
-    printf("%c: ", a->c); 
+  if (estFeuille(a)) {
+    for (size_t i = 0; i < a->c.n; i++){
+      printf("%c", a->c.sym[i]);
+    }
+    printf (": ");
     afficherCode(arr, top); 
   } 
 } 
   
 
 void
-codageHuffman (char c[], int freq[], int size) 
+codageHuffman (symbole c[], int freq[], int size) 
 { 
   // Construction arbre de huffman
-  struct Noeud* a = creerArbreHuffman(c, freq, size); 
+  Noeud* a = creerArbreHuffman(c, freq, size); 
   
   // Affochages de codes obtenu grace à l'arbre
   int arr[MAX_TREE_HT], top = 0; 
   creerCodes(a, arr, top); 
 } 
-  
 
 int
 main() 
-{ 
-  char arr[] = { 'a', 'b', 'c'}; 
-  int freq[] = { 5, 9, 12 }; 
+{
+  symbole s1, s2, s3;
+  s1.sym = (char*) malloc (sizeof(char));
+  s1.sym = "011";
+  s1.n = 3;
+  s2.sym = (char*) malloc (sizeof(char));
+  s2.sym = "01";
+  s2.n = 2;
+  s3.sym = (char*) malloc (sizeof(char));
+  s3.sym = "011010";
+  s3.n = 6;
+  
+  symbole arr[3];
+  arr[0] = s1; arr[1] = s2; arr[2] = s3;
+  int freq[] = { 2, 22, 21 }; 
   
   int size = sizeof(arr) / sizeof(arr[0]); 
   
