@@ -1,48 +1,53 @@
 #include "../include/fileReader.h"
 
-/*
-int
-main ()
+long
+size_file (FILE* fd)
 {
-  read("./test/test1", 60);
-}*/
+  long tmp = 0;
+  if (fseek (fd, 0, SEEK_END) == -1)
+    {
+      perror ("Error ");
+      exit (EXIT_FAILURE);
+    }
+  tmp = ftell (fd);
+  if (fseek (fd, 0, SEEK_SET) == -1)
+    {
+      perror ("Error ");
+      exit (EXIT_FAILURE);
+    }
+  return tmp;
+}
 
-/**
- * Lit n bytes dans le fichier filepath et les stockes dans le tableau buf
- * Renvoie un ptr vers ce tableau
- */
 char*
-read (char* filepath, int n)
+read_file (char* filepath)
 {
   printf ("Lecture du fichier : %s\n", filepath);
   int charLus = 0;
   char* buf = NULL;
   FILE* fd = NULL;
+  long size = 0;
   
-  fd = open_file (filepath, fd);
+  fd = open_file (filepath);
   if (fd == NULL)
     exit(EXIT_FAILURE);
 
-  buf = (char*) malloc (n * sizeof (char));
+  
+  size = size_file (fd);
+  buf = (char*) malloc (size * sizeof (char));
  
-  charLus = read_n_bytes (fd, n, buf);
+  charLus = read_n_bytes (fd, size, buf);
   printf ("%d caractere lus\n", charLus);
   
   printf ("--%s--\n", buf);
-  
+
+  fclose (fd);
   return buf;
-  
 }
 
-/**
- * Ouvre le fichier filepath 
- * Renvoie le descripteur de fichier vers filepath 
- * NULL si erreur
- */
 FILE*
-open_file (char* filepath, FILE* fd)
+open_file (char* filepath)
 {
-  fd = fopen (filepath, "r");
+  FILE* fd = fopen (filepath, "r");
   if (fd == NULL)
     {
       perror ("Erreur ");
@@ -52,11 +57,6 @@ open_file (char* filepath, FILE* fd)
   return fd;
 }
 
-
-/**
- * Lit n bytes du descripteur de fichier fd et les stockes dans le tableau buf
- * Renvoie le nombre de bytes lus
- */
 int
 read_n_bytes (FILE* fd, int n, char* buf)
 {

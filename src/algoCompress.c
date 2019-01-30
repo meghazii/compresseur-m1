@@ -218,7 +218,7 @@ codageHuffman (symbole c[], int freq[], int size)
   int arr[MAX_TREE_HT], top = 0; 
   creerCodes(a, arr, top); 
 } 
-
+/*
 int
 main() 
 {
@@ -243,3 +243,4 @@ main()
   
   return 0; 
 } 
+*/

@@ -6,12 +6,15 @@
 
 #define MAX_TREE_HT 100 
 
-
 typedef struct symbole {
   char* sym;
   size_t n;
 } symbole;
 
+typedef struct symboleList {
+  char* symbole;
+  size_t n;
+} symboleList;
 
 // Noeud Arbre Huffman
 typedef struct Noeud { 
